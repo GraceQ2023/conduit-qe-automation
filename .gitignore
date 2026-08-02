@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+
+# Playwright reports
+playwright-report/
+test-results/
+blob-report/
+
+# Playwright cache
+playwright/.cache/
+
+# Authentication state
+playwright/.auth/
+.auth/
+
+# OS
+.DS_Store
+
