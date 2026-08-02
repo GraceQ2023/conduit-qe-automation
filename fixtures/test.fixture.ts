@@ -2,16 +2,33 @@ import { test as base, request as baseRequest, type APIRequestContext } from '@p
 import { AuthApi } from '../api/auth-api';
 import { LoginResponse } from '../types/auth';
 import {LoginPage} from '../pages/login-page';
+import { HeaderComponent } from '../components/header-component';
+import { HomePage } from '../pages/home-page';
 //import { ArticleApi } from '../api/article-api';
 
 type TestFixtures = {
-    authenticatedRequest: APIRequestContext;
+    
+    homePage: HomePage;
+    header: HeaderComponent;
     loginPage: LoginPage;
+    authenticatedRequest: APIRequestContext;
 
   // articleApi: ArticleApi;
 };
 
 export const test = base.extend<TestFixtures>({
+
+    homePage: async ({ page }, use) => {
+        await use(new HomePage(page));
+    },
+
+    loginPage: async ({ page }, use) => {
+        await use(new LoginPage(page));
+    },
+
+    header: async ({ page }, use) => {
+        await use(new HeaderComponent(page));
+    },
 
     // Fixture to provide an authenticated API request context for tests that require authentication
     authenticatedRequest: async ({request}, use) => {
@@ -38,14 +55,8 @@ export const test = base.extend<TestFixtures>({
     });
 
     await use(apiContext);
-
     await apiContext.dispose();
     },
-
-    loginPage: async ({ page }, use) => {
-        await use(new LoginPage(page));
-    },
-
     
 });
 
