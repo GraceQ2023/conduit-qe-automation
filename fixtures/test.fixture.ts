@@ -4,13 +4,17 @@ import { LoginResponse } from '../types/auth';
 import {LoginPage} from '../pages/login-page';
 import { HeaderComponent } from '../components/header-component';
 import { HomePage } from '../pages/home-page';
+import { EditorPage } from '../pages/editor-page';
+import { ArticlePage } from '../pages/article-page';
 //import { ArticleApi } from '../api/article-api';
 
 type TestFixtures = {
-    
+
     homePage: HomePage;
-    header: HeaderComponent;
     loginPage: LoginPage;
+    editorPage: EditorPage;
+    articlePage: ArticlePage;
+    header: HeaderComponent;
     authenticatedRequest: APIRequestContext;
 
   // articleApi: ArticleApi;
@@ -26,9 +30,21 @@ export const test = base.extend<TestFixtures>({
         await use(new LoginPage(page));
     },
 
+    editorPage: async ({ page }, use) => {
+        await use(new EditorPage(page));
+    },
+
+    articlePage: async ({ page }, use) => {
+        await use(new ArticlePage(page));
+    },
+
     header: async ({ page }, use) => {
         await use(new HeaderComponent(page));
     },
+
+    // articleApi: async ({ request }, use) => {
+    //     await use(new ArticleApi(request));
+    // },
 
     // Fixture to provide an authenticated API request context for tests that require authentication
     authenticatedRequest: async ({request}, use) => {

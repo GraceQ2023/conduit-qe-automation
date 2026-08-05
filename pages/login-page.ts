@@ -7,9 +7,9 @@ export class LoginPage {
     readonly signInButton: Locator;
 
     constructor(private readonly page: Page) {
-        this.emailTextbox = page.getByRole('textbox', { name: 'Email' });
-        this.passwordTextbox = page.getByRole('textbox', { name: 'Password' });
-        this.signInButton = page.getByRole('button', { name: 'Sign in' });
+        this.emailTextbox = this.page.getByRole('textbox', { name: 'Email' });
+        this.passwordTextbox = this.page.getByRole('textbox', { name: 'Password' });
+        this.signInButton = this.page.getByRole('button', { name: 'Sign in' });
     }
 
     async navigate() {

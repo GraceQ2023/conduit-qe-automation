@@ -17,6 +17,9 @@ playwright/.cache/
 playwright/.auth/
 .auth/
 
+# Playwright MCP
+.playwright-mcp/
+
 # OS
 .DS_Store
 
