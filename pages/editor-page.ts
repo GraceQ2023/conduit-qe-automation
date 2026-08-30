@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
+import { CreateArticleRequest, UpdateArticleRequest } from '../types/article';
 
 export class EditorPage {
 
@@ -20,14 +21,37 @@ export class EditorPage {
         await this.page.goto('/editor');
     }
 
-    async createArticle(title: string, description: string, body: string, tags: string[]): Promise<void> {
-        await this.titleInput.fill(title);
-        await this.descriptionInput.fill(description);
-        await this.bodyInput.fill(body);
-        for (const tag of tags) {
+
+    async createArticle(
+        article:CreateArticleRequest
+    ): Promise<void> {
+        await this.titleInput.fill(article.title);
+        await this.descriptionInput.fill(article.description);
+        await this.bodyInput.fill(article.body);
+        for (const tag of article.tagList ?? []) {
             await this.tagsInput.fill(tag);
             await this.tagsInput.press('Enter');
         }
+        await this.publishButton.click();
+    }
+
+
+    async editArticle(
+        article:UpdateArticleRequest
+    ): Promise<void> {
+
+        if (article.title !== undefined) {
+            await this.titleInput.fill(article.title);
+        }
+
+        if (article.description !== undefined) {
+            await this.descriptionInput.fill(article.description);
+        }
+
+        if (article.body !== undefined) {
+            await this.bodyInput.fill(article.body);
+        }
+        
         await this.publishButton.click();
     }
 }

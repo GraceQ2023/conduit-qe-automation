@@ -3,7 +3,6 @@ import{Locator, Page} from "@playwright/test";
 export class HeaderComponent {
 
     private readonly header: Locator;
-
     readonly homeLink: Locator;
     readonly signInLink: Locator;
     readonly signUpLink: Locator;

@@ -1,10 +1,15 @@
 import { test, expect } from '../../fixtures/test.fixture';
 
+
+// override the storage state for this test suite to ensure a clean state, start as a guest 
+
+test.use({storageState: {cookies: [],origins: []}});
+
 test.describe('Login UI', () => {
 
-    test('log in with valid credentials', async ({ homePage, loginPage, header, page }) => {
+    test('log in with valid credentials', async ({loginPage, header, page }) => {
 
-        await homePage.navigate();
+        await page.goto('/');
         await expect(header.signInLink).toBeVisible();
         await header.signInLink.click();
 
@@ -20,7 +25,7 @@ test.describe('Login UI', () => {
 
         await expect(
             header.profileLink(process.env.TEST_USERNAME!),).toBeVisible();
-            
+
     });
 
 });

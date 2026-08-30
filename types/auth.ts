@@ -20,3 +20,5 @@ export interface AuthErrorResponse {
     "email or password": string[];
   };
 }
+
+// Additional auth interfaces like registration, logout, tokens, refresh tokens, roles etc. can be added here when needed

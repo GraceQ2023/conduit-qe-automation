@@ -2,7 +2,7 @@ import type { APIRequestContext, APIResponse } from '@playwright/test';
 import type { LoginRequest} from '../types/auth';
 
 
-// AuthApi class that provides methods to interact with the authentication API endpoints
+// API client/helper communcatte with authentication endpoints
 
 export class AuthApi {
 
@@ -15,8 +15,9 @@ export class AuthApi {
                 data: {user: requestBody},
             },
         );
+    }   
 
-    }
+    // Additional methods for registration, logout can be added here later on
 
-    
+
 }
