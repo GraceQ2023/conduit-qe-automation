@@ -4,6 +4,7 @@ import type { ArticleResponse } from '../../types/article';
 import { ArticleTestData } from '../../test-data/article-test-data';
 
 
+// helper to create a test article, a prerequisite setup for other tests that need an existing article
 async function createTestArticle(
     articleApi: ArticleApi
     ): Promise<ArticleResponse['article']> {
@@ -21,7 +22,7 @@ test.describe('Article API', () => {
 
     test.describe('POST /articles', () => {
 
-        test('user can create an article', async ({ authenticatedRequest }) => {
+        test('user can create an article', { tag: '@smoke' }, async ({ authenticatedRequest }) => {
             const articleApi = new ArticleApi(authenticatedRequest);
             const createData = ArticleTestData.createArticle();
 
@@ -42,6 +43,7 @@ test.describe('Article API', () => {
                 expect(body.article.slug).toBeTruthy();
 
             } finally {
+                // cleanup still runs if the test fails
                 if (articleSlug) {
                     await articleApi.deleteArticle(articleSlug);
                 }
@@ -65,13 +67,15 @@ test.describe('Article API', () => {
                 expect(response.status()).toBe(200);
 
                 const body = (await response.json()) as ArticleResponse;
-                // Update currentSlug — changing the title may generate a new slug
+
+                // update currentSlug — changing title will generate a new slug
                 currentSlug = body.article.slug;
 
                 expect(body.article.title).toBe(editData.title);
                 expect(body.article.description).toBe(editData.description);
                 expect(body.article.body).toBe(editData.body);
             } finally {
+                // cleanup runs even if assertions above fail
                 if (currentSlug) await articleApi.deleteArticle(currentSlug);
             }
         });

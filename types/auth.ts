@@ -1,4 +1,4 @@
-// Interface for login request payload, i.e., the data sent to the login API
+// Define the expected login API request and response shapes instead of using `any`
 
 export interface LoginRequest{
     email: string;
@@ -11,7 +11,7 @@ export interface LoginResponse {
         username: string;
         bio: string | null;
         image: string | null;
-        token: string;
+        token: string; // JWT used in `Authorization: Token <token>` headers
     };
 }
 
@@ -21,4 +21,4 @@ export interface AuthErrorResponse {
   };
 }
 
-// Additional auth interfaces like registration, logout, tokens, refresh tokens, roles etc. can be added here when needed
+// other auth interfaces like registration, logout, tokens, refresh tokens etc. can be added here when needed

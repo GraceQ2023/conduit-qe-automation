@@ -2,7 +2,8 @@ import type { APIRequestContext, APIResponse } from '@playwright/test';
 import type { LoginRequest} from '../types/auth';
 
 
-// API client/helper communcatte with authentication endpoints
+// Handles auth API calls, currently just login, will add registration/logout later
+// Use default `request` fixture - an unauthenticated request context
 
 export class AuthApi {
 
@@ -16,8 +17,6 @@ export class AuthApi {
             },
         );
     }   
-
-    // Additional methods for registration, logout can be added here later on
 
 
 }

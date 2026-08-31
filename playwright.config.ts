@@ -2,21 +2,9 @@ import { defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 import path from "path";
 
-// Load environment variables from .env file
-// path.resolve(__dirname, '.env') resolves the path to the .env file in the current directory
+// load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: "./tests",
   /* Run tests in files in parallel */
@@ -39,25 +27,31 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
 
-  /* Configure projects for major browsers */
+  /* separate projects for auth setup, API tests and authenticated UI tests */
   projects: [
+
+    // setup project: runs auth.setup.ts first to log in via API
+    // save the authenticated browser state to .auth/user.json and prepare it for authenticated UI tests
     {
       name: "setup",
       testMatch: /.*\.setup\.ts/,
     },
 
+    // api project: runs API specs, authentication is provided by authenticatedRequest fixture
     {
       name: "api",
       testMatch: /.*\.api\.spec\.ts/,
     },
 
+
+    // chromium project: runs UI specs in Chrome using authenticated state created by setup
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        storageState: ".auth/user.json",
+        storageState: ".auth/user.json",  // load saved login state so authenticated UI tests can skip login flow
       },
-      dependencies: ["setup"],
+      dependencies: ["setup"], // run setup project first so storageState file is ready
       testMatch: /.*\.ui\.spec\.ts/,
     },
 

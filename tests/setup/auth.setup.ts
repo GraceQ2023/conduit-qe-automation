@@ -3,12 +3,14 @@ import { AuthApi } from '../../api/auth-api';
 import type { LoginResponse } from '../../types/auth';
 
 
-
-// Setup test to authenticate user and store authentication state for subsequent tests  
+// runs once before authenticated UI tests
+// saves the authenticated browser state to .auth/user.json so tests skip the login flow
 
 const authFile = '.auth/user.json';
 
 setup('authenticate user', async ({ request, page, header }) => {
+
+    // Login via API so UI tests don't depend on login page
     const authApi = new AuthApi(request);
 
     const response = await authApi.login({
@@ -23,12 +25,14 @@ setup('authenticate user', async ({ request, page, header }) => {
 
     await page.goto('/');
 
+    // the app stores JWT in localStorage, then set it directly to create the logged-in state
     await page.evaluate((jwtToken) => {
         localStorage.setItem('jwtToken', jwtToken);
     }, token);
 
-    await page.reload();
+    await page.reload(); // reload so app picks up the token
 
+    // check authentication worked before saving the state
     await expect(header.newArticleLink).toBeVisible();
 
     await expect(

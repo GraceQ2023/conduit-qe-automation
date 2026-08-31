@@ -26,6 +26,7 @@ test.describe('Article Lifecycle UI Tests', () => {
             await header.newArticleLink.click();
             await expect(page).toHaveURL('/editor');
 
+            // start listening before Publish so wont miss the API response
             const createResponsePromise = page.waitForResponse(
                 response =>
                     response.url().includes('/api/articles') &&
@@ -37,6 +38,7 @@ test.describe('Article Lifecycle UI Tests', () => {
             const createResponse = await createResponsePromise;
             const createBody = await createResponse.json();
 
+            // get backend-generated slug from the create response
             articleSlug = createBody.article.slug;
 
             await expect(page).toHaveURL(new RegExp(`/article/${articleSlug}`));
@@ -48,11 +50,13 @@ test.describe('Article Lifecycle UI Tests', () => {
         });
 
 
+        // --- Edit article ---
         await test.step('Edit article', async () => {
 
             await articlePage.navigateToEdit();
             await expect(page).toHaveURL(new RegExp(`/editor/${articleSlug}`));
 
+            // set up before the action that triggers it, if registered after the response may already be gone
             const updateResponsePromise = page.waitForResponse(
                 response =>
                     response.url().includes(`/api/articles/${articleSlug}`) &&
@@ -64,6 +68,7 @@ test.describe('Article Lifecycle UI Tests', () => {
             const updateResponse = await updateResponsePromise;
             const updateBody = await updateResponse.json();
 
+            // changing title may generate a new slug, so keep the latest one
             articleSlug = updateBody.article.slug;
 
             await expect(page).toHaveURL(new RegExp(`/article/${articleSlug}`));
@@ -72,7 +77,9 @@ test.describe('Article Lifecycle UI Tests', () => {
             await expect(articlePage.articleTitle).toHaveText(editData.title);
             await expect(articlePage.articleBody).toContainText(editData.body);
         });
+        
 
+        // --- Delete article ---
         await test.step('Delete article', async () => {
             await articlePage.deleteArticle();
             await expect(page).toHaveURL('/');

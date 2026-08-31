@@ -6,6 +6,9 @@ import { HeaderComponent } from '../components/header-component';
 import { EditorPage } from '../pages/editor-page';
 import { ArticlePage } from '../pages/article-page';
 
+
+// Define page objects and authenticated API context that tests can use as fixtures
+
 type TestFixtures = {
 
     loginPage: LoginPage;
@@ -33,7 +36,8 @@ export const test = base.extend<TestFixtures>({
         await use(new HeaderComponent(page));
     },
 
-    // Fixture to provide an authenticated API request context for tests that require authentication
+  
+    // Login via API and create a request context with auth token added to every request, so tests can make authenticated API calls
     authenticatedRequest: async ({request}, use) => {
         const authApi = new AuthApi(request);
 
@@ -49,6 +53,7 @@ export const test = base.extend<TestFixtures>({
 
         const body = await loginResponse.json() as LoginResponse;
 
+        // use a separate context so API tests don't need to add the auth header themselves
         const apiContext = await baseRequest.newContext({
             baseURL: process.env.API_URL,
             extraHTTPHeaders: {
@@ -58,11 +63,10 @@ export const test = base.extend<TestFixtures>({
         });
 
         await use(apiContext);
-        await apiContext.dispose();
+        await apiContext.dispose(); // created this context manually so clean it up after test
 
     },    
 });
 
-
-// Re-export everything from the base test module
+// Re-export expect so tests only need to import from this fixture file
 export { expect } from '@playwright/test';
