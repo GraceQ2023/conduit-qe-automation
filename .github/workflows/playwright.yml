@@ -35,7 +35,14 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright tests
+      # PRs only run smoke tests for fast feedback
+      - name: Run smoke tests
+        if: github.event_name == 'pull_request'
+        run: npx playwright test --grep @smoke
+
+      # Main and manual runs execute the full regression suite
+      - name: Run regression tests
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: npx playwright test
 
       - name: Upload Playwright report

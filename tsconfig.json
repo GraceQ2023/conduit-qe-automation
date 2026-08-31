@@ -3,11 +3,12 @@
     "target": "ES2022",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "strict": true,
+    "strict": true,         // catches null/undefined issues and other common type bugs at compile time
     "esModuleInterop": true,
-    "types": ["node", "@playwright/test"],
+    "types": ["node", "@playwright/test"], // makes Node.js and Playwright globals available without explicit imports
     "skipLibCheck": true
   },
+  // explicit list so TS only compiles project source files
   "include": [
     "api/**/*.ts",
     "components/**/*.ts",

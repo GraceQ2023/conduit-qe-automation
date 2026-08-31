@@ -1,6 +1,9 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test';
 import type { CreateArticleRequest, UpdateArticleRequest } from '../types/article';
 
+
+// Handles article CRUD API calls, use authenticated request context - authenticatedRequest fixture
+
 export class ArticleApi {
 
     constructor(

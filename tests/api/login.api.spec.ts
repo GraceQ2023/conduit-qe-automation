@@ -11,7 +11,7 @@ test.describe('Login API', () => {
         authApi = new AuthApi(request);
     });
 
-    test('user can log in with valid credentials', async () => {
+    test('user can log in with valid credentials', { tag: '@smoke' }, async () => {
 
         const response = await authApi.login({
             email: process.env.TEST_EMAIL!,
